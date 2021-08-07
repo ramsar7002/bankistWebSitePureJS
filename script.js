@@ -7,6 +7,7 @@ const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+let header = document.querySelector('.header')
 
 const openModal = function (e) {
   e.preventDefault();
@@ -20,9 +21,8 @@ const closeModal = function (e) {
   overlay.classList.add('hidden');
 };
 
-btnsOpenModal.forEach(btn=>{
-  btn.addEventListener('click', openModal);
-})
+btnsOpenModal[1].addEventListener('click', openModal);
+
 
 btnCloseModal.addEventListener('click', closeModal);
 overlay.addEventListener('click', closeModal);
@@ -33,6 +33,11 @@ document.addEventListener('keydown', function (e) {
   }
   
 });
+
+//Scroll to top on refresh
+window.onbeforeunload = function () {
+  if(window.scrollTo) window.scrollTo(0,0);
+};
 
 
 //////////////////////////////
@@ -50,8 +55,9 @@ document.querySelectorAll('.nav__link').forEach(function(e){
 
 //Page navigation using event delegation - the better option
 document.querySelector('.nav__links').addEventListener('click', function(e){
+  if(e.target.classList.contains('btn--show-modal')) return
   e.preventDefault()
-  if(e.target.classList.contains('nav__link') && !e.target.classList.contains('btn--show-modal')){
+  if(e.target.classList.contains('nav__link')){
     const id = e.target.getAttribute('href');
     document.querySelector(id).scrollIntoView({behavior: 'smooth'})
 }
@@ -83,6 +89,7 @@ btnscrollTo.addEventListener('click',(e)=>{
 })
 
 //Show a cookie message on the screen
+/*
 const message = document.createElement('div');
 message.classList.add('cookie-message');
 //message.textContent='We use cookies for improved functionality and analytics';
@@ -100,6 +107,7 @@ document.querySelector('.btn--close-cookie').addEventListener('click',(e)=>{
   //message.parentElement.removeChild(message);
   message.remove();
 });
+*/
 
 
 
@@ -307,4 +315,28 @@ const lazyLoadingObserver = new IntersectionObserver(showoriginalImage,{
 const images = document.querySelectorAll('.features__img');
 images.forEach(img=>{
   lazyLoadingObserver.observe(img)
+})
+
+//Implement a Slider Component
+const slides = document.querySelectorAll('.slide')
+let curSlide=0;
+slides.forEach((s,i)=>s.style.transform=`translateX(${100*i}%)`)
+
+const sliderBtnRight = document.querySelector('.slider__btn--right');
+const sliderBtnleft = document.querySelector('.slider__btn--left');
+
+sliderBtnRight.addEventListener('click',(e)=>{
+  curSlide++;
+  curSlide%=3
+  slides.forEach((s,i)=>{
+    s.style.transform=`translateX(${100*(i-curSlide)}%)`
+  })
+})
+
+sliderBtnleft.addEventListener('click',(e)=>{
+  curSlide--;
+  curSlide%=3
+  slides.forEach((s,i)=>{
+    s.style.transform=`translateX(${100*(i+curSlide)}%)`
+  })
 })

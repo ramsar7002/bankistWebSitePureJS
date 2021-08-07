@@ -242,11 +242,10 @@ const obsever = new IntersectionObserver(obsCallBack,obsOptions);
 obsever.observe(section1);
 */
 header = document.querySelector('.header');
+
 const navHeight = nav.getBoundingClientRect();
-console.log(navHeight)
 const stickyNav = function(entries){
   const entry = entries[0];
-  console.log(entry)
   if(!entry.isIntersecting)
     nav.classList.add('sticky');
     else
@@ -260,3 +259,28 @@ const headerObserver = new IntersectionObserver(stickyNav,{
   rootMargin:`-${navHeight.height}px`,
 });
 headerObserver.observe(header)
+
+//Revealing Elements on Scroll
+
+const revealSection = function(entries, observer){
+  const [entry] = entries;
+  console.log(entry)
+
+  if(!entry.isIntersecting) return
+  entry.target.classList.remove('section--hidden')
+  observer.unobserve(entry.target)
+  
+}
+
+const sectionObserver = new IntersectionObserver(revealSection,{
+  root: null,
+  threshold: 0.10,
+  
+})
+
+const sections = document.querySelectorAll('.section');
+sections.forEach(section=>{
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden')
+})
+

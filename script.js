@@ -88,7 +88,7 @@ message.classList.add('cookie-message');
 //message.textContent='We use cookies for improved functionality and analytics';
 message.innerHTML='We use cookies for improved functionality and analytics. <button class="btn btn--close-cookie">Got it!</button>';
 
-const header = document.querySelector('.header')
+let header = document.querySelector('.header')
 //header.prepend(message)
 //header.append(message.cloneNode(true))
 //header.append(message)
@@ -178,8 +178,7 @@ const tabsContent = document.querySelectorAll('.operations__content');
 tabsContainer.addEventListener('click', function(e){
   const clicked = e.target.closest('.operations__tab');
   if(!clicked) return
-  console.log(clicked);
-  [...tabs].forEach(tab=>{
+    [...tabs].forEach(tab=>{
     tab.classList.remove('operations__tab--active')
     tab.classList.remove('operations__content--active')
   });
@@ -190,6 +189,74 @@ tabsContainer.addEventListener('click', function(e){
   clicked.classList.add('operations__tab--active')
   document.querySelector(`.operations__content--${clicked.dataset.tab}`).classList.add('operations__content--active')
   //Activate content area
-
 });
-   
+
+
+//Over on link and make the other fade
+const nav = document.querySelector('.nav');
+const navLinks = document.querySelectorAll('.nav__link');
+
+const handleOver = function(e){
+  if(e.target.classList.contains('nav__link')){
+    [...navLinks].forEach(link=>{
+      link.style.opacity=this;
+    })
+        //logo
+        e.target.closest('.nav').querySelector('img').style.opacity=this;
+        e.target.style.opacity='1';  
+  }
+}
+nav.addEventListener('mouseover', handleOver.bind(0.5));
+nav.addEventListener('mouseout', handleOver.bind(1));
+
+//Implementing a Sticky Navigation:
+//bad performance example
+/*
+const initialCoords = section1.getBoundingClientRect();
+const cookieArea = document.querySelector('.cookie-message');
+window.addEventListener('scroll',function(){
+  if(window.scrollY>initialCoords.top){
+    nav.classList.add('sticky');
+  }
+  else{
+     nav.classList.remove('sticky');
+  }
+
+})
+*/
+
+//A better way to implement sticky navgiation
+//Example of observer
+/*
+const obsCallBack = function(enteries, observer){
+  enteries.forEach(entry=> {
+    console.log(entry)
+  })
+}
+
+const obsOptions = {
+  root: null,
+  threshold: [0.1, 0],
+}
+const obsever = new IntersectionObserver(obsCallBack,obsOptions);
+obsever.observe(section1);
+*/
+header = document.querySelector('.header');
+const navHeight = nav.getBoundingClientRect();
+console.log(navHeight)
+const stickyNav = function(entries){
+  const entry = entries[0];
+  console.log(entry)
+  if(!entry.isIntersecting)
+    nav.classList.add('sticky');
+    else
+    nav.classList.remove('sticky');
+  
+
+}
+const headerObserver = new IntersectionObserver(stickyNav,{
+  root: null,
+  threshold: 0,
+  rootMargin:`-${navHeight.height}px`,
+});
+headerObserver.observe(header)

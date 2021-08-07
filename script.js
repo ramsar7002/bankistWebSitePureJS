@@ -264,7 +264,7 @@ headerObserver.observe(header)
 
 const revealSection = function(entries, observer){
   const [entry] = entries;
-  console.log(entry)
+
 
   if(!entry.isIntersecting) return
   entry.target.classList.remove('section--hidden')
@@ -274,7 +274,7 @@ const revealSection = function(entries, observer){
 
 const sectionObserver = new IntersectionObserver(revealSection,{
   root: null,
-  threshold: 0.10,
+  threshold: 0,
   
 })
 
@@ -284,3 +284,27 @@ sections.forEach(section=>{
   section.classList.add('section--hidden')
 })
 
+//implementing Lazy Loading Images
+
+const showoriginalImage=function(entries, observer){
+  const entry = entries[0];
+  if(!entry.isIntersecting) return
+  entry.target.src=`${entry.target.src.slice(0,-9)}.jpg`
+
+  entry.target.addEventListener('load',()=>{
+    entry.target.classList.remove('lazy-img')
+    observer.unobserve(entry.target);
+  })
+
+}
+
+const lazyLoadingObserver = new IntersectionObserver(showoriginalImage,{
+  root: null,
+  threshold: 0,
+  rootMargin: '200px'
+})
+
+const images = document.querySelectorAll('.features__img');
+images.forEach(img=>{
+  lazyLoadingObserver.observe(img)
+})

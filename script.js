@@ -366,7 +366,6 @@ const createDots = () => {
   allDots = document.querySelectorAll('.dots__dot');
 
   allDots.forEach(dot => {
-    console.log(dot.dataset.slide);
     if (Number(dot.dataset.slide) === 0) {
       dot.classList.add('dots__dot--active');
     }
@@ -378,7 +377,6 @@ let slide;
 dotsContainer.addEventListener('click', e => {
   if (e.target.classList.contains('dots__dot')) {
     slide = e.target.dataset.slide;
-    console.log(slide);
     goToSlide(slide);
     changeCurDot(slide);
   }

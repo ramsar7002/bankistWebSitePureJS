@@ -348,11 +348,13 @@ sliderBtnRight.addEventListener('click', e => {
   nextSlide(e);
 });
 
+//Left and right keyboard key handler
 document.addEventListener('keydown', function (e) {
   if (e.key === 'ArrowRight') nextSlide();
   else if (e.key === 'ArrowLeft') prevSlide();
 });
 
+//implement the dots
 let allDots;
 const createDots = () => {
   slides.forEach((_, i) => {

@@ -1,7 +1,9 @@
 Website: https://babypedia.co.il/bank/
 <br/>
-Acoouny login details: 
+Bank acoount login details: 
+<br/>
+Click on "Account Login"
 <br/>
 User: js
 <br/>
-pass: 1111
+PIN: 1111
